@@ -1,0 +1,100 @@
+@EnersoftSensorsManagementSystem.API_HostAddress = http://localhost:5031
+
+### Auth Endpoints ###
+
+# Login
+POST {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+
+# Register
+POST {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "password": "newpassword"
+}
+
+
+### Sensors Endpoints ###
+
+# Get All Sensors
+GET {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/sensors
+Authorization: Bearer <your_token_here>
+Accept: application/json
+
+# Get Sensor by ID
+GET {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/sensors/1
+Authorization: Bearer <your_token_here>
+Accept: application/json
+
+# Add a New Sensor
+POST {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/sensors
+Authorization: Bearer <your_token_here>
+Content-Type: application/json
+
+{
+  "name": "Temperature Sensor",
+  "location": "Warehouse",
+  "installationDate": "2025-01-12T12:00:00",
+  "isActive": true,
+  "typeId": 1
+}
+
+# Update a Sensor
+PUT {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/sensors/1
+Authorization: Bearer <your_token_here>
+Content-Type: application/json
+
+{
+  "name": "Updated Temperature Sensor",
+  "location": "Main Building",
+  "installationDate": "2025-01-12T12:00:00",
+  "isActive": true,
+  "typeId": 2
+}
+
+# Delete a Sensor
+DELETE {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/sensors/1
+Authorization: Bearer <your_token_here>
+
+
+### SensorTypes Endpoints ###
+
+# Get All Sensor Types
+GET {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/sensortypes
+Authorization: Bearer <your_token_here>
+Accept: application/json
+
+# Get Sensor Type by ID
+GET {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/sensortypes/1
+Authorization: Bearer <your_token_here>
+Accept: application/json
+
+# Add a New Sensor Type
+POST {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/sensortypes
+Authorization: Bearer <your_token_here>
+Content-Type: application/json
+
+{
+  "name": "Humidity Sensor"
+}
+
+# Update a Sensor Type
+PUT {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/sensortypes/1
+Authorization: Bearer <your_token_here>
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Updated Humidity Sensor"
+}
+
+# Delete a Sensor Type
+DELETE {{EnersoftSensorsManagementSystem.API_HostAddress}}/api/sensortypes/1
+Authorization: Bearer <your_token_here>

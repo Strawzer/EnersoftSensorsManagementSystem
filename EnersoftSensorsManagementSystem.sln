@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnersoftSensorsManagementSystem.Core", "EnersoftSensorsManagementSystem.Core\EnersoftSensorsManagementSystem.Core.csproj", "{8D9BB715-C39C-4247-8638-4BC6135EE095}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnersoftSensorsManagementSystem.Application", "EnersoftSensorsManagementSystem.Application\EnersoftSensorsManagementSystem.Application.csproj", "{6DFC44B7-94C9-429E-847D-12C3C24EF4BD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnersoftSensorsManagementSystem.Infrastructure", "EnersoftSensorsManagementSystem.Infrastructure\EnersoftSensorsManagementSystem.Infrastructure.csproj", "{33C59EA1-86B0-453B-9DC2-CB2750174BA8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnersoftSensorsManagementSystem.API", "EnersoftSensorsManagementSystem.API\EnersoftSensorsManagementSystem.API.csproj", "{5E6D73B0-2882-4861-9C91-3E9C3F6552B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DAE2F182-1725-4AD5-A2E3-71037D365EF9}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnersoftSensorsManagementSystem.UnitTests", "EnersoftSensorsManagementSystem.UnitTests\EnersoftSensorsManagementSystem.UnitTests.csproj", "{A5DAB2B0-2AEE-4D05-8FB5-0E4DB698A6C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnersoftSensorsManagementSystem.IntegrationTests", "EnersoftSensorsManagementSystem.IntegrationTests\EnersoftSensorsManagementSystem.IntegrationTests.csproj", "{58871C23-7020-4DA6-8E0C-4D702946D6E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D9BB715-C39C-4247-8638-4BC6135EE095}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D9BB715-C39C-4247-8638-4BC6135EE095}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D9BB715-C39C-4247-8638-4BC6135EE095}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D9BB715-C39C-4247-8638-4BC6135EE095}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DFC44B7-94C9-429E-847D-12C3C24EF4BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DFC44B7-94C9-429E-847D-12C3C24EF4BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DFC44B7-94C9-429E-847D-12C3C24EF4BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DFC44B7-94C9-429E-847D-12C3C24EF4BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33C59EA1-86B0-453B-9DC2-CB2750174BA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33C59EA1-86B0-453B-9DC2-CB2750174BA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33C59EA1-86B0-453B-9DC2-CB2750174BA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33C59EA1-86B0-453B-9DC2-CB2750174BA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E6D73B0-2882-4861-9C91-3E9C3F6552B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E6D73B0-2882-4861-9C91-3E9C3F6552B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E6D73B0-2882-4861-9C91-3E9C3F6552B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E6D73B0-2882-4861-9C91-3E9C3F6552B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5DAB2B0-2AEE-4D05-8FB5-0E4DB698A6C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5DAB2B0-2AEE-4D05-8FB5-0E4DB698A6C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5DAB2B0-2AEE-4D05-8FB5-0E4DB698A6C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5DAB2B0-2AEE-4D05-8FB5-0E4DB698A6C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58871C23-7020-4DA6-8E0C-4D702946D6E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58871C23-7020-4DA6-8E0C-4D702946D6E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58871C23-7020-4DA6-8E0C-4D702946D6E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58871C23-7020-4DA6-8E0C-4D702946D6E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {09636A52-C853-44AE-8556-8B5E91EBACBE}
+	EndGlobalSection
+EndGlobal

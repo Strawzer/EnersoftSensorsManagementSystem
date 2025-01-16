@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EnersoftSensorsManagementSystem.API.Controllers;
 
+[ApiController]
+[Authorize(Roles = "User")]
 [ApiVersion("2.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[Route("api/[controller]")]
-[Authorize(Roles = "User")]
 public class SensorsV2Controller : ControllerBase
 {
     [HttpGet]

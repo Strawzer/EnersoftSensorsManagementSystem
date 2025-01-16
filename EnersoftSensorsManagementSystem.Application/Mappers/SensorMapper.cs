@@ -17,7 +17,6 @@ public static class SensorMapper
             Id = sensor.Id,
             Name = sensor.Name,
             Location = sensor.Location,
-            InstallationDate = sensor.InstallationDate,
             IsActive = sensor.IsActive,
             TypeName = sensor.Type?.Name
         };
@@ -29,7 +28,6 @@ public static class SensorMapper
         {
             Name = dto.Name,
             Location = dto.Location,
-            InstallationDate = dto.InstallationDate,
             IsActive = dto.IsActive,
             TypeId = dto.TypeId
         };

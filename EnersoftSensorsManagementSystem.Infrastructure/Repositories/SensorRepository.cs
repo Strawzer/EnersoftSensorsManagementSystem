@@ -10,13 +10,13 @@ namespace EnersoftSensorsManagementSystem.Infrastructure.Repositories
     /// </summary>
     public class SensorRepository : ISensorRepository
     {
-        private readonly SensorDbContext _context;
+        private readonly PostgresSensorDbContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SensorRepository"/> class.
         /// </summary>
         /// <param name="context">The database context.</param>
-        public SensorRepository(SensorDbContext context)
+        public SensorRepository(PostgresSensorDbContext context)
         {
             _context = context;
         }

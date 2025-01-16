@@ -10,13 +10,13 @@ namespace EnersoftSensorsManagementSystem.Infrastructure.Repositories;
 /// </summary>
 public class UserRepository : IUserRepository
 {
-    private readonly SensorDbContext _context;
+    private readonly MssqlSensorDbContext _context;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UserRepository"/> class.
     /// </summary>
     /// <param name="context">The database context.</param>
-    public UserRepository(SensorDbContext context)
+    public UserRepository(MssqlSensorDbContext context)
     {
         _context = context;
     }

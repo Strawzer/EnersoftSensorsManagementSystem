@@ -1,4 +1,4 @@
-@EnersoftSensorsManagementSystem.API_HostAddress = http://localhost:5031
+@EnersoftSensorsManagementSystem.API_HostAddress = http://localhost:55051/swagger/index.html
 
 ### Auth Endpoints ###
 
@@ -41,7 +41,6 @@ Content-Type: application/json
 {
   "name": "Temperature Sensor",
   "location": "Warehouse",
-  "installationDate": "2025-01-12T12:00:00",
   "isActive": true,
   "typeId": 1
 }
@@ -54,7 +53,6 @@ Content-Type: application/json
 {
   "name": "Updated Temperature Sensor",
   "location": "Main Building",
-  "installationDate": "2025-01-12T12:00:00",
   "isActive": true,
   "typeId": 2
 }

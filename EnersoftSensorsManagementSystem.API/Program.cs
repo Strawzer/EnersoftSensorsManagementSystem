@@ -1,4 +1,4 @@
-
+using EnersoftSensorsManagementSystem.API.Filters;
 using EnersoftSensorsManagementSystem.API.Models;
 using EnersoftSensorsManagementSystem.Application.Interfaces;
 using EnersoftSensorsManagementSystem.Core.Interfaces;
@@ -10,90 +10,162 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
-namespace EnersoftSensorsManagementSystem.API
+namespace EnersoftSensorsManagementSystem.API;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
 
-            // PostgreSQL
-            builder.Services.AddDbContext<PostgresSensorDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
+        // Configure PostgreSQL Database
+        builder.Services.AddDbContext<PostgresSensorDbContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
+        builder.Services.AddScoped<ISensorRepository, SensorRepository>(); // Repository for PostgreSQL
+        builder.Services.AddScoped<ISensorTypeRepository, SensorTypeRepository>(); // Repository for PostgreSQL
 
-            // MySQL
-            builder.Services.AddDbContext<MySqlSensorDbContext>(options =>
-                options.UseMySQL(builder.Configuration.GetConnectionString("MySqlConnection")!));
+        // Configure MSSQL Database
+        builder.Services.AddDbContext<MssqlSensorDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("MssqlConnection")));
+        builder.Services.AddScoped<IUserRepository, UserRepository>(); // Repository for MSSQL
 
-            // MSSQL
-            builder.Services.AddDbContext<MssqlSensorDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("MssqlConnection")));
+        // Caching service
+        builder.Services.AddMemoryCache();
 
-            // Caching service
-            builder.Services.AddMemoryCache();
-
-            // Versionning service 
-            builder.Services.AddApiVersioning(options =>
+        // Add JWT Authentication
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.DefaultApiVersion = new ApiVersion(1, 0);
-                options.ReportApiVersions = true; 
-            });
-
-            // Add services to the container.
-            builder.Services.AddScoped<ISensorRepository, SensorRepository>();
-            builder.Services.AddScoped<ISensorTypeRepository, SensorTypeRepository>();
-            builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            var app = builder.Build();
-
-            // Middleware for global exception handling
-            app.UseExceptionHandler(appBuilder =>
-            {
-                appBuilder.Run(async context =>
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    context.Response.StatusCode = 500;
-                    context.Response.ContentType = "application/json";
-
-                    var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
-                    if (exception != null)
-                    {
-                        var errorResponse = new ErrorResponse
-                        {
-                            StatusCode = context.Response.StatusCode,
-                            Message = "An unexpected error occurred.",
-                            Details = exception.Message
-                        };
-
-                        await context.Response.WriteAsJsonAsync(errorResponse);
-                    }
-                });
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                    ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"] ?? "YourStrongKeyWithAtLeast32Characters!")
+                    )
+                };
             });
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+        // Add API Versioning
+        builder.Services.AddApiVersioning(options =>
+        {
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+            options.ReportApiVersions = true;
+        });
+
+        // Add Swagger Configuration
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Enersoft Sensors Management API V1", Version = "1.0" });
+            c.SwaggerDoc("v2", new OpenApiInfo { Title = "Enersoft Sensors Management API V2", Version = "2.0" });
+
+            // Add JWT Bearer Security Definition
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Enter 'Bearer' followed by your JWT token. Example: Bearer abc123"
+            });
 
-            app.UseHttpsRedirection();
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
 
-            app.UseAuthorization();
+            // Filter endpoints by API version
+            c.DocInclusionPredicate((version, apiDesc) =>
+            {
+                var versions = apiDesc.ActionDescriptor.EndpointMetadata
+                    .OfType<ApiVersionAttribute>()
+                    .SelectMany(attr => attr.Versions);
 
+                return versions.Any(v => $"v{v.MajorVersion:0}" == version);
+            });
 
-            app.MapControllers();
+            // Remove the version parameter from the Swagger UI
+            c.OperationFilter<RemoveVersionFromParameter>();
 
-            app.Run();
+            // Replace the version in the route with the exact version value
+            c.DocumentFilter<ReplaceVersionWithExactValueInPath>();
+        });
+
+        // Add Controllers
+        builder.Services.AddControllers();
+
+        // Add Services
+        builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+        var app = builder.Build();
+
+        // Middleware for global exception handling
+        app.UseExceptionHandler(appBuilder =>
+        {
+            appBuilder.Run(async context =>
+            {
+                context.Response.StatusCode = 500;
+                context.Response.ContentType = "application/json";
+
+                var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+                if (exception != null)
+                {
+                    var errorResponse = new ErrorResponse
+                    {
+                        StatusCode = context.Response.StatusCode,
+                        Message = "An unexpected error occurred.",
+                        Details = exception.Message
+                    };
+
+                    await context.Response.WriteAsJsonAsync(errorResponse);
+                }
+            });
+        });
+
+        // Configure the HTTP request pipeline
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "API V2");
+            });
         }
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers();
+        var endpoints = app.Services.GetRequiredService<EndpointDataSource>().Endpoints;
+        foreach (var endpoint in endpoints)
+        {
+            Console.WriteLine(endpoint.DisplayName);
+        }
+        app.Run();
+
+        
     }
 }

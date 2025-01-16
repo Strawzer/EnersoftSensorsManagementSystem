@@ -14,17 +14,19 @@ namespace EnersoftSensorsManagementSystem.API.Controllers
     /// API controller for managing sensor types.
     /// </summary>
     [ApiController]
-    [Route(("api/v{version:apiVersion}/[controller]"))]
     [Authorize(Roles = "Admin")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class SensorTypesController : ControllerBase
     {
         private readonly ISensorTypeRepository _repository;
         private readonly IMemoryCache _cache;
         private const string SensorTypesCacheKey = "GetAllSensorTypes";
 
-        public SensorTypesController(ISensorTypeRepository repository)
+        public SensorTypesController(ISensorTypeRepository repository, IMemoryCache memoryCache)
         {
             _repository = repository;
+            _cache = memoryCache;
         }
 
         /// <summary>

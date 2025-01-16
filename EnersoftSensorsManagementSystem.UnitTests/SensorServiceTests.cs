@@ -9,16 +9,18 @@ namespace EnersoftSensorsManagementSystem.UnitTests;
 
 public class SensorRepositoryTests
 {
-    private readonly SensorDbContext _context;
+    private readonly PostgresSensorDbContext _context;
     private readonly SensorRepository _repository;
 
     public SensorRepositoryTests()
     {
-        var options = new DbContextOptionsBuilder<SensorDbContext>()
+        // Configure the in-memory database for PostgresSensorDbContext
+        var options = new DbContextOptionsBuilder<PostgresSensorDbContext>()
             .UseInMemoryDatabase(databaseName: "SensorTestDb")
             .Options;
 
-        _context = new SensorDbContext(options);
+        // Initialize the DbContext and repository
+        _context = new PostgresSensorDbContext(options);
         _repository = new SensorRepository(_context);
     }
 

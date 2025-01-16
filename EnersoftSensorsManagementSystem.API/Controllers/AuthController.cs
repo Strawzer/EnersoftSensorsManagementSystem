@@ -11,7 +11,9 @@ namespace EnersoftSensorsManagementSystem.API.Controllers;
 /// API controller for authentication.
 /// </summary>
 [ApiController]
-[Route(("api/v{version:apiVersion}/[controller]"))]
+[ApiVersion("1.0")]
+[ApiVersion("2.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly IUserRepository _userRepository;

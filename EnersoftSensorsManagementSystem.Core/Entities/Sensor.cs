@@ -21,11 +21,6 @@ public class Sensor
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// Sensor installation date
-    /// </summary>
-    public DateTime InstallationDate { get; set; }
-
-    /// <summary>
     /// Is active sensor
     /// </summary>
     public bool IsActive { get; set; }
@@ -38,5 +33,5 @@ public class Sensor
     /// <summary>
     /// Sensor type navigation property
     /// </summary>
-    public SensorType Type { get; set; } = new();
+    public SensorType Type { get; set; }
 }

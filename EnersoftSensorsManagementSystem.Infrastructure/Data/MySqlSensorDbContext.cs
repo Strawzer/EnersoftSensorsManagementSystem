@@ -2,7 +2,7 @@
 
 namespace EnersoftSensorsManagementSystem.Infrastructure.Data;
 
-public class MySqlSensorDbContext : SensorDbContext
+public class MySqlSensorDbContext : DbContext
 {
     public MySqlSensorDbContext(DbContextOptions<MySqlSensorDbContext> options) : base(options) { }
 }

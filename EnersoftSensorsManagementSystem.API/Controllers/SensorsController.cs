@@ -1,15 +1,11 @@
-﻿using EnersoftSensorsManagementSystem.Application.DTOs;
-using EnersoftSensorsManagementSystem.Application.Interfaces;
+﻿using EnersoftSensorsManagementSystem.API.Models;
+using EnersoftSensorsManagementSystem.Application.DTOs;
 using EnersoftSensorsManagementSystem.Application.Mappers;
 using EnersoftSensorsManagementSystem.Application.Validators;
 using EnersoftSensorsManagementSystem.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using FluentValidation.Results;
 using Microsoft.Extensions.Caching.Memory;
-using EnersoftSensorsManagementSystem.API.Exceptions;
-using EnersoftSensorsManagementSystem.API.Models;
-using System.ComponentModel.DataAnnotations;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace EnersoftSensorsManagementSystem.API.Controllers
@@ -18,18 +14,19 @@ namespace EnersoftSensorsManagementSystem.API.Controllers
     /// API controller for managing sensors.
     /// </summary>
     [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize(Roles = "Admin")]
     [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class SensorsController : ControllerBase
     {
         private readonly ISensorRepository _repository;
         private readonly IMemoryCache _cache;
         private const string SensorsCacheKey = "GetAllSensors";
 
-        public SensorsController(ISensorRepository repository)
+        public SensorsController(ISensorRepository repository, IMemoryCache cache)
         {
             _repository = repository;
+            _cache = cache;
         }
 
         [HttpGet]
@@ -75,7 +72,7 @@ namespace EnersoftSensorsManagementSystem.API.Controllers
         {
             var sensor = await _repository.GetByIdAsync(id);
             if (sensor == null)
-                throw new NotFoundException($"Sensor with ID {id} was not found.");
+                return NotFound($"Sensor with ID {id} was not found.");
 
             return Ok(SensorMapper.ToDto(sensor));
         }
